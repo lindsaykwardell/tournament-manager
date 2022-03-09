@@ -8,16 +8,27 @@ import Test.Html.Query as Query
 import Test.Html.Selector as Html
 
 
+start : ProgramTest.ProgramTest Main.Model Main.Msg Main.Effect
+start =
+    ProgramTest.createElement
+        { init = Main.init
+        , update = Main.update
+        , view = Main.view
+        }
+        |> ProgramTest.start ()
+
+
 suite : Test
 suite =
     describe "tournament-manager"
         [ test "renders the app" <|
             \_ ->
-                ProgramTest.createElement
-                    { init = Main.init
-                    , update = Main.update
-                    , view = Main.view
-                    }
-                    |> ProgramTest.start ()
+                start
                     |> ProgramTest.expectViewHas [ Html.text "Tournament Manager" ]
+        , describe "setup"
+            [ test "Allows text entry for new name" <|
+                \_ ->
+                    start
+                        |> ProgramTest.expectViewHas [ Html.text "Enter new player" ]
+            ]
         ]
