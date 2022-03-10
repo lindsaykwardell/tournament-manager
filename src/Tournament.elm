@@ -4,31 +4,31 @@ import Player exposing (Player)
 
 
 type Tournament
-    = Setup String (List Player)
+    = Setup String
     | InProgress (List ( Player, Player ))
     | Completed (List ( Player, Player ))
 
 
 init : Tournament
 init =
-    Setup "" []
+    Setup ""
 
 
 enterName : Tournament -> String -> Tournament
 enterName tournament name =
     case tournament of
-        Setup _ players ->
-            Setup name players
+        Setup _ ->
+            Setup name
 
         _ ->
             tournament
 
 
-addPlayer : Tournament -> Tournament
+addPlayer : Tournament -> ( Tournament, Player )
 addPlayer tournament =
     case tournament of
-        Setup name players ->
-            Setup "" (Player.createNew name :: players)
+        Setup name ->
+            ( Setup "", Player.createNew name )
 
         _ ->
-            tournament
+            ( tournament, Player.createNew "" )

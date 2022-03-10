@@ -4,17 +4,19 @@ import Browser
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
-import Player
+import Player exposing (Player)
 import Tournament exposing (Tournament)
 
 
 type alias Model =
-    { tournament : Tournament }
+    { tournament : Tournament
+    , players : List Player
+    }
 
 
 init : () -> ( Model, Effect )
 init _ =
-    ( { tournament = Tournament.init }, None )
+    ( { tournament = Tournament.init, players = [] }, None )
 
 
 type Msg
@@ -29,7 +31,8 @@ update msg model =
             ( { model | tournament = Tournament.enterName model.tournament name }, None )
 
         AddPlayer ->
-            ( { model | tournament = Tournament.addPlayer model.tournament }, None )
+            Tournament.addPlayer model.tournament
+                |> (\( tournament, player ) -> ( { model | tournament = tournament, players = player :: model.players }, None ))
 
 
 type Effect
@@ -47,7 +50,7 @@ view model =
         [ div [ class "flex flex-col justify-center items-center" ]
             [ h1 [ class "text-4xl m-auto py-4" ] [ text "Tournament Manager" ]
             , case model.tournament of
-                Tournament.Setup newPlayer players ->
+                Tournament.Setup newPlayer ->
                     div []
                         [ Html.form [ onSubmit AddPlayer ]
                             [ label [ class "flex flex-col" ]
@@ -59,7 +62,7 @@ view model =
                                 ]
                             ]
                         , ul [ class "list-disc" ]
-                            (players
+                            (model.players
                                 |> List.map
                                     (\player ->
                                         li [] [ text <| Player.getName player ]
