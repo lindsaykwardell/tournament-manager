@@ -29,6 +29,8 @@ suite =
             [ test "Allows text entry for new name" <|
                 \_ ->
                     start
-                        |> ProgramTest.expectViewHas [ Html.text "Enter new player" ]
+                        |> ProgramTest.fillIn "" "Enter new player" "Player 1"
+                        |> ProgramTest.clickButton "Add Player"
+                        |> ProgramTest.expectViewHas [ Html.text "Player 1" ]
             ]
         ]
