@@ -14,8 +14,8 @@ init =
     Setup ""
 
 
-enterName : Tournament -> String -> Tournament
-enterName tournament name =
+enterName : String -> Tournament -> Tournament
+enterName name tournament =
     case tournament of
         Setup _ ->
             Setup name

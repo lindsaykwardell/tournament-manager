@@ -28,7 +28,7 @@ update : Msg -> Model -> ( Model, Effect )
 update msg model =
     case msg of
         EnterName name ->
-            ( { model | tournament = Tournament.enterName model.tournament name }, None )
+            ( { model | tournament = Tournament.enterName name model.tournament }, None )
 
         AddPlayer ->
             Tournament.addPlayer model.tournament
